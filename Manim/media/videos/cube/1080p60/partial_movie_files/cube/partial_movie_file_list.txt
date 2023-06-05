@@ -1,0 +1,6 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Code/Maths Research/Manim/media/videos/cube/1080p60/partial_movie_files/cube/1730109348_1966510806_3951790232.mp4'
+file 'file:C:/Code/Maths Research/Manim/media/videos/cube/1080p60/partial_movie_files/cube/2531250232_3397463857_1494114537.mp4'
+file 'file:C:/Code/Maths Research/Manim/media/videos/cube/1080p60/partial_movie_files/cube/2952191469_454084030_1583083174.mp4'
+file 'file:C:/Code/Maths Research/Manim/media/videos/cube/1080p60/partial_movie_files/cube/2922283074_4260122064_2785091566.mp4'
+file 'file:C:/Code/Maths Research/Manim/media/videos/cube/1080p60/partial_movie_files/cube/146245653_1719412436_4189713322.mp4'
