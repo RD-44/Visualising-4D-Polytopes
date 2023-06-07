@@ -7,25 +7,34 @@ from math import sin, cos
 fig = plt.subplot(111, projection='3d')
 plt.subplots_adjust(bottom=0.25)
 
+def distsquared(p1, p2):
+    return sum((p1[i]-p2[i])**2 for i in range (4))
+
+# Creates an adjacency matrix to represent vertex connections in the shape
+points = list(iter.product([-1, 1], repeat=4))
+neighbours = {}
+for p in points:
+    neighbours[p] = set()
+    for k in points:
+        if distsquared(p, k) == 4 and not (k in neighbours and p in neighbours[k]):
+            neighbours[p].add(k)
+
 def rotate(point, a, b): # Applies 4D rotation matrix
     x, y, z, w = point
     c1, s1, c2, s2 = cos(a), sin(a), cos(b), sin(b)
     return (c1*x - s1*y, s1*x + c1*y, c2*z - s2*w, s2*z + c2*w)
 
+# draws shape 
 def update(h, a, b):
     fig.clear()
-    points = iter.product([-1, 1], repeat=4)
     for p in points:
-        x, y, z, w = p  
-        rx, ry, rz, rw = rotate(p, a, b)
-        dest = [rotate((-x, y, z, w), a, b), rotate((x, -y, z, w), a, b), 
-                rotate((x, y, -z, w), a, b), rotate((x, y, z, -w), a, b)]
-        sf = np.divide(h, h-rw)  
-        # Connecting vertex to the 4 neighbouring vertices
-        for d in dest:
-            dx, dy, dz, dw = d
-            dsf = np.divide(h, h-dw)
-            fig.plot([sf*rx, dsf*dx], [sf*ry, dsf*dy], [sf*rz, dsf*dz], c="red")
+        x, y, z, w = rotate(p, a, b)
+        sf = np.divide(h, h-w)  
+        # Connecting vertex to the neighbouring vertices
+        for n in neighbours[p]:
+            nx, ny, nz, nw = rotate(n, a, b)
+            nsf = np.divide(h, h-nw)
+            fig.plot([sf*x, nsf*nx], [sf*y, nsf*ny], [sf*z, nsf*nz])
 
 h_slider = Slider(
     ax=plt.axes([0.2, 0.05, 0.65, 0.03]),

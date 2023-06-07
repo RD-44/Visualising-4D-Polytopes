@@ -4,9 +4,21 @@ import itertools as iter
 import numpy as np
 from math import sin, cos
 
+# This is an example to show projection of 3d cube into 2d plane
 fig3d = plt.subplot(121, projection='3d')
 fig2d = plt.subplot(122)
 plt.subplots_adjust(bottom=0.25)
+
+points = list(iter.product([-1, 1], repeat=3))
+
+def distsquared(p1, p2): return sum((p1[i]-p2[i])**2 for i in range (3))
+
+neighbours = {}
+for p in points:
+    neighbours[p] = set()
+    for k in points:
+        if distsquared(p, k) == 4 and not (k in neighbours and p in neighbours[k]):
+            neighbours[p].add(k)
 
 def rotate(point, a, b): # Applies 3D rotation matrix
     x, y, z = point
@@ -16,15 +28,13 @@ def rotate(point, a, b): # Applies 3D rotation matrix
 def update(h, a, b):
     fig2d.clear()
     fig3d.clear()
-    points = iter.product([-1, 1], repeat=3)
+    
     for p in points:
-        x, y, z = p  
         rx, ry, rz = rotate(p, a, b)
-        dest = [rotate((-x, y, z), a, b), rotate((x, -y, z), a, b), rotate((x, y, -z), a, b)]
         sf = np.divide(h, h-rz)  
-        # Connecting vertex to the 3 neighbouring vertices
-        for d in dest:
-            dx, dy, dz = d
+
+        for d in neighbours[p]:
+            dx, dy, dz = rotate(d, a, b)
             dsf = np.divide(h, h-dz)
             fig2d.plot([sf*rx, dsf*dx], [sf*ry, dsf*dy], c="red")
             fig3d.plot([rx, dx], [ry, dy], [rz, dz], c="red")
